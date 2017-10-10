@@ -1,0 +1,4 @@
+include 'clientone'
+include 'commons'
+include 'discovery'
+include 'warehouse'
