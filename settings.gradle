@@ -3,3 +3,5 @@ include 'discovery'
 include 'commons'
 include 'clientone'
 include 'warehouse'
+include 'scanmed'
+
