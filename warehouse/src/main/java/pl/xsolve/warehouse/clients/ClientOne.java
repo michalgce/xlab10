@@ -5,8 +5,8 @@ import org.springframework.amqp.core.Exchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
-import pl.xsolve.commons.dtos.dtos.HealthyDataDto;
-import pl.xsolve.commons.dtos.dtos.SearchQueryDto;
+import pl.xsolve.commons.dtos.HealthyDataDto;
+import pl.xsolve.commons.dtos.SearchQueryDto;
 
 @Component
 @RequestScope

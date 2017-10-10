@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import pl.xsolve.commons.dtos.dtos.HealthyDataDto;
+import pl.xsolve.commons.dtos.HealthyDataDto;
 import pl.xsolve.warehouse.services.MergerService;
 
 @RestController

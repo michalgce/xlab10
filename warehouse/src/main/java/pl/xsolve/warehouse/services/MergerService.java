@@ -2,9 +2,10 @@ package pl.xsolve.warehouse.services;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
+
+import pl.xsolve.commons.dtos.HealthyDataDto;
 import pl.xsolve.warehouse.clients.ClientOne;
 import pl.xsolve.warehouse.clients.ClientTwo;
-import pl.xsolve.commons.dtos.dtos.HealthyDataDto;
 
 @Service
 public class MergerService {

@@ -37,7 +37,7 @@ dependencies {
 	compile('org.springframework.cloud:spring-cloud-starter-hystrix-dashboard')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	compile("org.springframework.boot:spring-boot-starter-amqp")
-	compileOnly('org.projectlombok:lombok')
+	compileOnly 'org.projectlombok:lombok:1.16.18'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 
