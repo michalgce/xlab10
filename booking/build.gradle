@@ -22,18 +22,19 @@ repositories {
 	mavenCentral()
 }
 
-
 ext {
 	springCloudVersion = 'Dalston.SR4'
 }
 
 dependencies {
 	compile project(':commons')
-	compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.4.0")
 	compile('org.springframework.cloud:spring-cloud-starter-eureka')
-	compile("org.springframework.boot:spring-boot-starter-amqp")
+	compile('com.google.guava:guava:18.0')
+	compile('org.springframework.boot:spring-boot-starter-amqp')
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-web')
-	compileOnly 'org.projectlombok:lombok:1.16.18'
+	runtime('com.h2database:h2')
+	compileOnly('org.projectlombok:lombok')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 

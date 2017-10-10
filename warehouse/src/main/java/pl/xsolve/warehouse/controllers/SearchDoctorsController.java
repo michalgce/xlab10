@@ -10,7 +10,7 @@ import pl.xsolve.warehouse.services.MergerService;
 @RestController
 public class SearchDoctorsController {
 
-  protected MergerService mergerService;
+  private MergerService mergerService;
 
   public SearchDoctorsController(MergerService mergerService) {
     this.mergerService = mergerService;
@@ -18,8 +18,8 @@ public class SearchDoctorsController {
 
   @GetMapping(value = "/city/{city}/speciality/{speciality}")
   public List<HealthyDataDto> searchByCityAndSpeciality(@PathVariable String city, @PathVariable String speciality) {
-      return mergerService.getData(city, speciality);
-
+      //return mergerService.getData(city, speciality);
+      return null;
   }
 
 }

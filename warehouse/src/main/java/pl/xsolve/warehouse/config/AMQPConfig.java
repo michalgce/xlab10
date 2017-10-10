@@ -16,7 +16,7 @@ import org.springframework.messaging.handler.annotation.support.DefaultMessageHa
 @Configuration
 public class AMQPConfig implements RabbitListenerConfigurer {
 
-  public final static String queueName = "xlab.rpc.request";
+  public final static String queueName = "xlab.rpc.booking";
 
   @Bean
   public Queue queue() {

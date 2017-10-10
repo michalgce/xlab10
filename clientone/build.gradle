@@ -22,11 +22,9 @@ repositories {
 	mavenCentral()
 }
 
-
 ext {
 	springCloudVersion = 'Dalston.SR4'
 }
-
 
 dependencies {
 	compile project(':commons')
