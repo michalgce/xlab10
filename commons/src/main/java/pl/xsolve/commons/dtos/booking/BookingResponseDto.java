@@ -1,6 +1,5 @@
 package pl.xsolve.commons.dtos.booking;
 
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,6 +10,6 @@ import lombok.Data;
 public class BookingResponseDto {
   private Long id;
   private String doctorName;
-  private LocalDateTime visitDateTime;
+  private String visitDateTime;
   private Boolean successful;
 }

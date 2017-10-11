@@ -1,15 +1,22 @@
 package pl.xsolve.booking.entities;
 
-import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.Value;
 
 @Entity
-@Value
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Booking {
 
@@ -17,6 +24,7 @@ public class Booking {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
   private String doctorName;
-  private LocalDateTime visitDateTime;
+  private String visitDateTime;
   private Boolean successful;
+
 }

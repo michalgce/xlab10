@@ -10,6 +10,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class BookingDataDto {
   private String doctorName;
-  private LocalDateTime visitDateTime;
+  private String visitDateTime;
 
 }
