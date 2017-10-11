@@ -1,18 +1,25 @@
 package pl.xsolve.warehouse.services;
 
+import com.google.common.collect.Lists;
+import java.util.List;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.xsolve.warehouse.clients.BookingClient;
-import pl.xsolve.warehouse.clients.ClientTwo;
+import pl.xsolve.commons.dtos.DoctorSlot;
+import pl.xsolve.warehouse.clients.ScanmedClient;
 
 @Service
+@AllArgsConstructor
 public class MergerService {
 
-  protected BookingClient bookingClient;
-  protected ClientTwo clientTwo;
+  protected ScanmedClient scanmedClient;
+  //protected KamilClient client;
 
-  public MergerService(BookingClient bookingClient, ClientTwo clientTwo) {
-    this.bookingClient = bookingClient;
-    this.clientTwo = clientTwo;
+  public List<DoctorSlot> getDoctorsSlots(String location, String specialty) {
+    List<DoctorSlot> scanmedResponse = scanmedClient.fetchScanmedResponse(location, specialty);
+    List<DoctorSlot> kamilResponse = Lists.newArrayList();
+    scanmedResponse.addAll(kamilResponse);
+
+    return scanmedResponse;
   }
 
 }

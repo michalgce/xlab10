@@ -4,7 +4,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import pl.xsolve.commons.dtos.HealthyDataDto;
+import pl.xsolve.commons.dtos.DoctorSlot;
 import pl.xsolve.warehouse.services.MergerService;
 
 @RestController
@@ -16,10 +16,8 @@ public class SearchDoctorsController {
     this.mergerService = mergerService;
   }
 
-  @GetMapping(value = "/city/{city}/speciality/{speciality}")
-  public List<HealthyDataDto> searchByCityAndSpeciality(@PathVariable String city, @PathVariable String speciality) {
-      //return mergerService.getData(city, speciality);
-      return null;
+  @GetMapping(value = "/city/{location}/specialty/{specialty}")
+  public List<DoctorSlot> searchByCityAndSpeciality(@PathVariable String location, @PathVariable String specialty) {
+      return mergerService.getDoctorsSlots(location, specialty);
   }
-
 }
