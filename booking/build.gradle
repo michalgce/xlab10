@@ -28,14 +28,15 @@ ext {
 
 dependencies {
 	compile project(':commons')
-	compile('org.springframework.boot:spring-boot-starter-actuator')
+	compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 	compile('org.springframework.cloud:spring-cloud-starter-eureka')
-	compile('org.springframework.cloud:spring-cloud-starter-feign')
-	compile('org.springframework.cloud:spring-cloud-starter-hystrix')
-	compile('org.springframework.cloud:spring-cloud-starter-hystrix-dashboard')
+	compile('org.springframework.cloud:spring-cloud-starter-ribbon')
+	compile('com.google.guava:guava:18.0')
+	compile('org.springframework.boot:spring-boot-starter-amqp')
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-web')
-	compile("org.springframework.boot:spring-boot-starter-amqp")
-	compileOnly 'org.projectlombok:lombok:1.16.18'
+	runtime('com.h2database:h2')
+	compileOnly('org.projectlombok:lombok')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
 

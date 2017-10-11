@@ -1,27 +1,21 @@
-package pl.xsolve.warehouse.config;
+package pl.xsolve.booking.config;
 
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.annotation.RabbitListenerConfigurer;
 import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistrar;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.converter.MappingJackson2MessageConverter;
 import org.springframework.messaging.handler.annotation.support.DefaultMessageHandlerMethodFactory;
 
 @Configuration
-public class AMQPConfig implements RabbitListenerConfigurer {
-
-  public final static String queueName = "xlab.rpc.booking";
-
-  @Bean
-  public Queue queue() {
-    return new Queue(queueName);
-  }
+@EnableRabbit
+public class AMPQConfig implements RabbitListenerConfigurer {
 
   @Bean
   public DirectExchange exchange() {
@@ -29,13 +23,24 @@ public class AMQPConfig implements RabbitListenerConfigurer {
   }
 
   @Bean
-  public Binding binding(Queue queue, DirectExchange exchange) {
-    return BindingBuilder.bind(queue).to(exchange).with("rpc");
+  public org.springframework.amqp.support.converter.MessageConverter jsonMessageConverter() {
+    return new Jackson2JsonMessageConverter();
+  }
+
+  @Bean
+  public ObjectMapper getObjectMapper() {
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    mapper.registerModule(new JavaTimeModule());
+    return mapper;
   }
 
   @Bean
   public MappingJackson2MessageConverter jackson2Converter() {
-    return new MappingJackson2MessageConverter();
+    MappingJackson2MessageConverter mappingJackson2MessageConverter = new MappingJackson2MessageConverter();
+    mappingJackson2MessageConverter.setObjectMapper(getObjectMapper());
+
+    return mappingJackson2MessageConverter;
   }
 
   @Bean
@@ -43,11 +48,6 @@ public class AMQPConfig implements RabbitListenerConfigurer {
     DefaultMessageHandlerMethodFactory factory = new DefaultMessageHandlerMethodFactory();
     factory.setMessageConverter(jackson2Converter());
     return factory;
-  }
-
-  @Bean
-  public MessageConverter jsonMessageConverter() {
-    return new Jackson2JsonMessageConverter();
   }
 
   @Override
