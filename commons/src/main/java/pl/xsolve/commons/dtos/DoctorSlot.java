@@ -1,4 +1,4 @@
-package software.xsolve.springcloud.scanmed.resource;
+package pl.xsolve.commons.dtos;
 
 import java.time.LocalDateTime;
 
