@@ -1,7 +1,6 @@
 include 'xlab10'
 include 'discovery'
 include 'commons'
-include 'clientone'
 include 'warehouse'
 include 'booking'
 include 'scanmed'
