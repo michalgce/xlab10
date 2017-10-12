@@ -1,6 +1,8 @@
 package pl.xsolve.warehouse.clients;
 
 import com.google.common.collect.Maps;
+import java.util.Arrays;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.amqp.core.Exchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -32,4 +34,11 @@ public class BookingClient {
     return bookingResponseDtoResponseEntity.getBody();
   }
 
+  public List<BookingResponseDto> getBookings() {
+    ResponseEntity<BookingResponseDto[]> forEntity = restTemplate
+        .getForEntity("http://booking-service/bookings", BookingResponseDto[].class,
+            Maps.newConcurrentMap());
+
+    return Arrays.asList(forEntity.getBody());
+  }
 }
