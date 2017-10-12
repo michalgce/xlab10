@@ -1,20 +1,23 @@
-package pl.xsolve.warehouse.clients;
+package pl.xsolve.warehouse.clients.fetching;
 
-import com.google.common.collect.Maps;
 import java.util.Arrays;
 import java.util.List;
-import lombok.AllArgsConstructor;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import com.google.common.collect.Maps;
+
+import lombok.AllArgsConstructor;
 import pl.xsolve.commons.dtos.DoctorSlot;
 
 @Component
 @AllArgsConstructor
-public class TwojNzozClient {
+public class TwojNzozClient implements FetchingClient {
 
   public RestTemplate restTemplate;
 
-  public List<DoctorSlot> fetchTwojNzozResponse(String city, String specialty) {
+  public List<DoctorSlot> fetchSlots(String city, String specialty) {
     DoctorSlot[] responseFromTwojnzoz = restTemplate
         .getForObject("http://twojnzoz/city/"+city+"/specialty/"+specialty, DoctorSlot[].class, Maps.newConcurrentMap());
 

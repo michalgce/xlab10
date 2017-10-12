@@ -1,28 +1,46 @@
 package pl.xsolve.warehouse.services;
 
-import com.google.common.collect.Lists;
 import java.util.List;
-import lombok.AllArgsConstructor;
+import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import com.google.common.collect.ImmutableList;
+
 import pl.xsolve.commons.dtos.DoctorSlot;
-import pl.xsolve.warehouse.clients.ScanmedClient;
-import pl.xsolve.warehouse.clients.TwojNzozClient;
+import pl.xsolve.warehouse.clients.fetching.FetchingClient;
 
 @Service
-@AllArgsConstructor
 public class MergerService {
 
-  protected ScanmedClient scanmedClient;
-  protected TwojNzozClient nzozClient;
+  private static final Logger logger = LoggerFactory.getLogger(MergerService.class);
 
-  public List<DoctorSlot> getDoctorsSlots(String location, String specialty) {
-    List<DoctorSlot> slots = Lists.newArrayList();
-    List<DoctorSlot> scanmedResponse = scanmedClient.fetchScanmedResponse(location, specialty);
-    List<DoctorSlot> twojNzozResponse = nzozClient.fetchTwojNzozResponse(location, specialty);
-    slots.addAll(scanmedResponse);
-    slots.addAll(twojNzozResponse);
+  protected List<FetchingClient> apiClients;
 
-    return slots;
+  public MergerService(List<FetchingClient> apiClients) {
+    this.apiClients = apiClients;
   }
 
+  public List<DoctorSlot> getDoctorsSlots(String location, String specialty) {
+    return apiClients.stream()
+            .map(client -> fetchLater(location, specialty, client))
+            .map(CompletableFuture::join)
+            .flatMap(slots -> slots.stream())
+            .collect(Collectors.toList());
+  }
+
+  protected CompletableFuture<List<DoctorSlot>> fetchLater(String location, String specialty, FetchingClient client) {
+    return CompletableFuture.supplyAsync(() -> client.fetchSlots(location, specialty))
+			.handle((fetchedSlots, errorFromService) -> {
+			  if (errorFromService != null) {
+				logger.error("Error while fetching from API: " + client.getClass().getName(), errorFromService);
+				return ImmutableList.<DoctorSlot>builder().build();
+			  } else {
+				return fetchedSlots;
+			  }
+			});
+  }
 }
