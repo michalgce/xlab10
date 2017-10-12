@@ -33,7 +33,7 @@ public class AvailableVisitsDto {
       @JsonProperty(value = "Godzina", access = Access.WRITE_ONLY)
       private Time time;
       @JsonProperty(value = "TerminId", access = Access.WRITE_ONLY)
-      private Integer terminId;
+      private Integer termId;
       @JsonProperty(value = "RozliczaniePrzezNfz", access = Access.WRITE_ONLY)
       private boolean payedByNfz;
 
