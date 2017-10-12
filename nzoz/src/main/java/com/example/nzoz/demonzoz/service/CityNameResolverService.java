@@ -12,17 +12,13 @@ public class CityNameResolverService {
 
   private RestTemplate restTemplate;
 
-  @Value("${google.maps.api.key}")
-  private String API_KEY;
-
   public CityNameResolverService(RestTemplate restTemplate) {
     this.restTemplate = restTemplate;
   }
 
   public Location resolveCityName(final String cityName) {
     GoogleApiDto googleApiDto = restTemplate.getForObject(
-        "https://maps.googleapis.com/maps/api/geocode/json?address=" + cityName + ",+PL&key="
-            + API_KEY, GoogleApiDto.class);
+        "https://maps.googleapis.com/maps/api/geocode/json?address=" + cityName + ",+PL", GoogleApiDto.class);
 
     Location location = googleApiDto.getResults()
         .get(0)

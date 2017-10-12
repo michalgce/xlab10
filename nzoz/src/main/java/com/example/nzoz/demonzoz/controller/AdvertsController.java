@@ -17,8 +17,7 @@ public class AdvertsController {
 
   @GetMapping("/city/{location}/specialty/{specialty}")
   public List<DoctorSlotDto> getAdverts(@PathVariable final String location,
-      @PathVariable final String specialty)
-      throws UnsupportedEncodingException {
+      @PathVariable final String specialty) {
     return advertService.getAdvertsTest(location, specialty);
   }
 }
