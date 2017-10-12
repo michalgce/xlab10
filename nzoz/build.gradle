@@ -1,0 +1,50 @@
+version 'unspecified'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath'org.springframework.boot:spring-boot-gradle-plugin:1.5.7.RELEASE'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+jar {
+    baseName = 'nzoz-rest-service'
+    version =  '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+ext {
+    springCloudVersion = 'Dalston.SR4'
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-devtools'
+    compile 'org.springframework.cloud:spring-cloud-starter-eureka'
+    compile 'org.jsoup:jsoup:1.10.3'
+    compile 'com.google.guava:guava:23.0'
+    compile 'org.projectlombok:lombok'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.1'
+
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
