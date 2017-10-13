@@ -26,12 +26,13 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @AllArgsConstructor
-public class AdvertService {
+public class VisitServiceImpl implements VisitService {
 
   private final RestTemplate restTemplate;
   private final CityNameResolverService cityNameResolverService;
 
-  public List<DoctorSlotDto> getAdverts(final String cityName, final String specialty) {
+  @Override
+  public List<DoctorSlotDto> getVisits(final String cityName, final String specialty) {
     Location locationResolved = cityNameResolverService.resolveCityName(cityName);
     String specialtyResolved = resolveSpecialty(specialty);
     Document document = getDocumentByLocationAndSpeciality(locationResolved, specialtyResolved);
