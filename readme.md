@@ -19,3 +19,11 @@
 * slajdy prezentacji: //TODO
 * IP Michała: `10.254.252.144`
 * serwer Http python: `$ python -m SimpleHTTPServer 8000`
+
+## Adres Rabbita do 2. części warsztatów:
+```
+spring.rabbitmq.host=10.254.252.144
+spring.rabbitmq.port=9100
+spring.rabbitmq.username=xlab
+spring.rabbitmq.password=xlab
+```
