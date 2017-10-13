@@ -8,6 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 
+import com.gargoylesoftware.htmlunit.WebClient;
+
 @SpringBootApplication //doWyczajenia
 @EnableEurekaClient
 public class Application {
@@ -19,5 +21,10 @@ public class Application {
 	@Bean
 	public Clock clock() {
 		return Clock.systemDefaultZone();
+	}
+
+	@Bean
+	public WebClient webClient() {
+		return new WebClient();
 	}
 }
