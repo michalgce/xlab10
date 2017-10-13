@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import com.gargoylesoftware.htmlunit.FailingHttpStatusCodeException;
@@ -16,11 +15,8 @@ import com.gargoylesoftware.htmlunit.html.DomNodeList;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.google.common.collect.ImmutableList;
 
-import lombok.AllArgsConstructor;
 import pl.xsolve.commons.dtos.DoctorSlot;
 
-@Service
-@AllArgsConstructor
 public class ScanmedService {
 
 	LocalDateTimeConverter localDateTimeConverter;
