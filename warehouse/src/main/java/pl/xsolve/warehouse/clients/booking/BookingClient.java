@@ -29,7 +29,7 @@ public class BookingClient {
 
   public BookingResponseDto bookViaRest(BookingDataDto bookingDataDto) {
     ResponseEntity<BookingResponseDto> bookingResponseDtoResponseEntity =
-        restTemplate.postForEntity("http://booking-service/book", bookingDataDto, BookingResponseDto.class, Maps.newConcurrentMap());
+        restTemplate.postForEntity("http://booking-service/bookings", bookingDataDto, BookingResponseDto.class, Maps.newConcurrentMap());
 
     return bookingResponseDtoResponseEntity.getBody();
   }
