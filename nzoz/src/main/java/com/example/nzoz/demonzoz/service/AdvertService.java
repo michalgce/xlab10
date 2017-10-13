@@ -31,27 +31,27 @@ public class AdvertService {
   private final RestTemplate restTemplate;
   private final CityNameResolverService cityNameResolverService;
 
-  public List<DoctorSlotDto> getAdvertsTest(final String cityName, final String speciality) {
+  public List<DoctorSlotDto> getAdverts(final String cityName, final String specialty) {
     Location locationResolved = cityNameResolverService.resolveCityName(cityName);
-    String specialityResolved = resolveSpeciality(speciality);
-    Document document = getDocumentByLocationAndSpeciality(locationResolved, specialityResolved);
+    String specialtyResolved = resolveSpecialty(specialty);
+    Document document = getDocumentByLocationAndSpeciality(locationResolved, specialtyResolved);
 
     List<DoctorSlotDto> timeSlots = Lists.newArrayList();
-    if (isTitleTerminPicking(document)) {
-      DoctorSlotDto doctorSlotDto = resolveOnlyOneResult(document);
-      timeSlots.add(doctorSlotDto);
+    if (isTitleTermPicking(document)) {
+      DoctorSlotDto doctorSlot = resolveOnlyOneResult(document);
+      timeSlots.add(doctorSlot);
     } else if (isTitleDoctorPicking(document)) {
-      List<DoctorSlotDto> doctorSlotDtos = resolveMultipleDoctorsResult(document);
-      timeSlots.addAll(doctorSlotDtos);
+      List<DoctorSlotDto> doctorSlot = resolveMultipleDoctorsResult(document);
+      timeSlots.addAll(doctorSlot);
     }
 
     return timeSlots;
   }
 
-  private LocalDateTime scrapTimeSlot(final String slotsUrl) {
+  private LocalDateTime scrapeTimeSlot(final String slotsUrl) {
     AvailableVisitsDto availableVisitsDto = restTemplate.getForObject(slotsUrl,
         AvailableVisitsDto.class);
-    Time hour = getHour(availableVisitsDto);
+    Time hour = getTime(availableVisitsDto);
 
     String dateFromUrl = slotsUrl.substring(slotsUrl.lastIndexOf("/") + 1);
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -64,7 +64,7 @@ public class AdvertService {
         hours, minutes);
   }
 
-  private Time getHour(final AvailableVisitsDto availableVisitsDto) {
+  private Time getTime(final AvailableVisitsDto availableVisitsDto) {
     Optional<Day> dayOptional = availableVisitsDto.getDays()
         .stream()
         .filter(Day::isHasSlots)
@@ -79,7 +79,7 @@ public class AdvertService {
         .getTime();
   }
 
-  private String scrapAddress(final Element element) {
+  private String scrapeAddress(final Element element) {
     String street = element.getElementsByClass("street-address")
         .text();
     String postal = element.getElementsByClass("postal-code")
@@ -90,7 +90,7 @@ public class AdvertService {
   }
 
 
-  private String scrapDoctor(final Element element) {
+  private String scrapeDoctor(final Element element) {
     String title = element.getElementsByClass("honorific-suffix")
         .text();
     String name = element.getElementsByClass("given-name")
@@ -104,12 +104,12 @@ public class AdvertService {
     List<DoctorSlotDto> timeSlots = Lists.newArrayList();
     Elements articles = document.getElementsByClass("search-result vcard n");
     articles.forEach(article -> {
-      String name = scrapDoctor(article);
-      String address = scrapAddress(article);
+      String name = scrapeDoctor(article);
+      String address = scrapeAddress(article);
 
       String doctorSlotsUrl = parseDoctorUrlToSlotsUrl(article.getElementsByTag("a")
           .attr("href"), 16);
-      LocalDateTime timeSlot = scrapTimeSlot(doctorSlotsUrl);
+      LocalDateTime timeSlot = scrapeTimeSlot(doctorSlotsUrl);
 
       timeSlots.add(DoctorSlotDto.builder()
           .name(name)
@@ -126,10 +126,10 @@ public class AdvertService {
 
     String name = element.getElementsByClass("fn")
         .text();
-    String address = scrapAddress(element);
+    String address = scrapeAddress(element);
 
     String doctorSlotsUrl = parseDoctorUrlToSlotsUrl(document.location(), 39);
-    LocalDateTime timeSlot = scrapTimeSlot(doctorSlotsUrl);
+    LocalDateTime timeSlot = scrapeTimeSlot(doctorSlotsUrl);
 
     return DoctorSlotDto.builder()
         .address(address)
@@ -171,7 +171,7 @@ public class AdvertService {
 
   }
 
-  private boolean isTitleTerminPicking(final Document document) {
+  private boolean isTitleTermPicking(final Document document) {
     return document.getElementsByTag("title")
         .first()
         .text()
@@ -187,11 +187,11 @@ public class AdvertService {
 
   private Document getDocumentByLocationAndSpeciality(final Location location,
       final String speciality) {
-    String web;
     Document document = null;
     try {
-      web = "https://www.twojnzoz.pl/wyszukiwarka/2/0?Localization=" + location.getLat() + "%2C"
-          + location.getLng() + "&Specialization=" + URLEncoder.encode(speciality, "UTF-8");
+      String web =
+          "https://www.twojnzoz.pl/wyszukiwarka/2/0?Localization=" + location.getLat() + "%2C"
+              + location.getLng() + "&Specialization=" + URLEncoder.encode(speciality, "UTF-8");
       document = Jsoup.connect(web)
           .get();
     } catch (IOException e) {
@@ -200,9 +200,9 @@ public class AdvertService {
     return document;
   }
 
-  private String resolveSpeciality(final String speciality) {
+  private String resolveSpecialty(final String speciality) {
     Optional<String> resolvedSpecialityOptional = Optional.ofNullable(
-        SpecialityMap.SPECIALITY_MAP.get(speciality));
+        SpecialityMap.SPECIALITY_MAP.get(speciality.toLowerCase()));
     return resolvedSpecialityOptional.orElse("Nobody expects the spanish inquisition");
   }
 }
