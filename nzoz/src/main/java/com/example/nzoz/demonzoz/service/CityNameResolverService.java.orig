@@ -1,0 +1,11 @@
+package com.example.nzoz.demonzoz.service;
+
+import com.example.nzoz.demonzoz.dto.GoogleApiDto.Geometry.Location;
+
+public interface CityNameResolverService {
+<<<<<<< HEAD
+  Location resolveCityName(String cityName);
+=======
+  Location resolveCityName(final String cityName);
+>>>>>>> Kamilek done
+}
