@@ -1,8 +1,0 @@
-spring.jackson.serialization.write_dates_as_timestamps=false
-<<<<<<< HEAD
-
-#eureka.client.service-url.defaultZone=
-
-google.maps.api.key=
-=======
->>>>>>> Kamilek done
