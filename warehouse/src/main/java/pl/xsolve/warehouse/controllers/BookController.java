@@ -1,7 +1,7 @@
 package pl.xsolve.warehouse.controllers;
 
 import java.util.List;
-import javax.ws.rs.GET;
+
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import pl.xsolve.commons.dtos.booking.BookingDataDto;
 import pl.xsolve.commons.dtos.booking.BookingResponseDto;
-import pl.xsolve.warehouse.clients.BookingClient;
+import pl.xsolve.warehouse.clients.booking.BookingClient;
 
 @RestController
 @AllArgsConstructor
