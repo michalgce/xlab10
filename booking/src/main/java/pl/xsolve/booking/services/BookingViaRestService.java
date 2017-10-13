@@ -4,16 +4,14 @@ import com.google.common.collect.Lists;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
-import org.springframework.amqp.rabbit.annotation.RabbitHandler;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import pl.xsolve.booking.entities.Booking;
 import pl.xsolve.booking.repositories.BookingRepo;
 import pl.xsolve.commons.dtos.booking.BookingDataDto;
 import pl.xsolve.commons.dtos.booking.BookingResponseDto;
 
-@Component
-@AllArgsConstructor
+@Service
 public class BookingViaRestService implements BookingService {
 
   private BookingRepo bookingRepo;
