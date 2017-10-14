@@ -1,0 +1,50 @@
+version 'unspecified'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath'org.springframework.boot:spring-boot-gradle-plugin:1.5.7.RELEASE'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+jar {
+    baseName = 'gs-rest-service'
+    version =  '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+ext {
+    springCloudVersion = 'Dalston.SR4'
+}
+
+dependencies {
+    compile project(':commons')
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.cloud:spring-cloud-starter-eureka'
+    compile 'com.google.guava:guava:11.0.2'
+    compile 'org.projectlombok:lombok'
+    compile 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.4.0'
+    compile 'net.sourceforge.htmlunit:htmlunit:2.27'
+
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}

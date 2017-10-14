@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html class="mdc-typography" >
+<head>
+    <script>
+        window.XLAB_API_BASE_URL = 'http://localhost:8081';
+    </script>
+    <meta charset="UTF-8">
+    <title>xLab#10 - Znajdź wizytę</title>
+    <link rel="stylesheet" href="node_modules/material-components-web/dist/material-components-web.css">
+    <style>
+        .panels {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 8px;
+        }
+
+        .panel {
+            display: none;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        .mdc-list-divider {
+            list-style: none;
+        }
+    </style>
+</head>
+    <body>
+    <main>
+        <section class="hero">
+            <div id="progressBar" style="display: none;" role="progressbar" class="mdc-linear-progress mdc-linear-progress--indeterminate">
+                <div class="mdc-linear-progress__buffering-dots"></div>
+                <div class="mdc-linear-progress__buffer"></div>
+                <div class="mdc-linear-progress__bar mdc-linear-progress__primary-bar">
+                    <span class="mdc-linear-progress__bar-inner"></span>
+                </div>
+                <div class="mdc-linear-progress__bar mdc-linear-progress__secondary-bar">
+                    <span class="mdc-linear-progress__bar-inner"></span>
+                </div>
+            </div>
+        </section>
+
+        <nav id="xlabTabBar" class="mdc-tab-bar">
+            <a class="mdc-tab mdc-tab--active" href="#panel-1">Search</a>
+            <a class="mdc-tab" href="#panel-2">Book</a>
+            <span class="mdc-tab-bar__indicator"></span>
+        </nav>
+
+        <section>
+            <div class="panels">
+                <div class="panel active mdc-layout-grid" id="panel-1" role="tabpanel" aria-hidden="false">
+                    <form action="#" id="searchDoctorForm" class="mdc-layout-grid__cell mdc-layout-grid__cell--align-middle">
+                        <div>
+                            <div class="mdc-form-field">
+                                <div class="mdc-textfield" data-mdc-auto-init="MDCTextfield">
+                                    <input id="location" type="text" class="mdc-textfield__input">
+                                    <label for="location" class="mdc-textfield__label">
+                                        Location
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="mdc-form-field">
+                                <div class="mdc-textfield" data-mdc-auto-init="MDCTextfield">
+                                    <input id="specialty" type="text" class="mdc-textfield__input">
+                                    <label for="specialty" class="mdc-textfield__label">
+                                        Speciality
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit"
+                                class="mdc-button
+                       mdc-button--raised
+                       mdc-button--primary
+                       mdc-ripple-surface"
+                                data-mdc-auto-init="MDCRipple">
+                            SEARCH
+                        </button>
+                    </form>
+
+                    <!-- The p element below is where we'll eventually output our greeting -->
+                    <div class="mdc-typography--headline">
+                        <ul class="mdc-list" id="doctorSearchResult"></ul>
+                    </div>
+                </div>
+                <div class="panel mdc-layout-grid" id="panel-2" role="tabpanel" aria-hidden="true">
+                    <form action="#" id="bookForm" class="mdc-layout-grid__cell mdc-layout-grid__cell--align-middle">
+                        <div>
+                            <div class="mdc-form-field">
+                                <div class="mdc-textfield" data-mdc-auto-init="MDCTextfield">
+                                    <input id="doctorName" type="text" class="mdc-textfield__input">
+                                    <label for="doctorName" class="mdc-textfield__label">
+                                        Doctor Name
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="mdc-form-field">
+                                <div class="mdc-textfield" data-mdc-auto-init="MDCTextfield">
+                                    <input id="visitDateTime" type="text" class="mdc-textfield__input">
+                                    <label for="visitDateTime" class="mdc-textfield__label">
+                                        Visit Date Time
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit"
+                                class="mdc-button
+                           mdc-button--raised
+                           mdc-button--primary
+                           mdc-ripple-surface"
+                                onclick="this.form.submited=this.id;"
+                                data-mdc-auto-init="MDCRipple">
+                            BOOK VIA AMQP
+                        </button>
+
+                        <button id="postRest" type="submit"
+                                class="mdc-button
+                           mdc-button--raised
+                           mdc-button--primary
+                           mdc-ripple-surface"
+                                onclick="this.form.submited=this.id;"
+                                data-mdc-auto-init="MDCRipple">
+                            BOOK VIA REST
+                        </button>
+                    </form>
+
+                    <br />
+                    <br />
+                    <form action="#" id="getAll" class="mdc-layout-grid__cell mdc-layout-grid__cell--align-middle">
+                        <button type="submit"
+                                class="mdc-button
+                           mdc-button--raised
+                           mdc-button--primary
+                           mdc-ripple-surface"
+                                data-mdc-auto-init="MDCRipple">
+                            GET ALL
+                        </button>
+                    </form>
+
+                    <!-- The p element below is where we'll eventually output our greeting -->
+                    <p class="mdc-typography--headline" id="allResults"></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- The p element below is where we'll eventually output our greeting -->
+        <p class="mdc-typography--headline" id="bookResult"></p>
+    </main>
+
+    <!-- JAVASCRIPT -->
+    <script src="node_modules/material-components-web/dist/material-components-web.min.js"></script>
+    <script>window.mdc.autoInit();</script>
+
+    <script>
+        function renderResult(data, id) {
+            var container = document.getElementById(id);
+            container.innerHTML = '';
+            data.forEach(function(element, index, array) {
+                var li = document.createElement('li');
+                var separator = document.createElement('li');
+
+                separator.classList.add('mdc-list-divider');
+                separator.setAttribute('role', 'separator');
+                li.classList.add('mdc-list-item');
+                li.innerText = [
+                    element.name,
+                    element.address,
+                    element.timeSlot
+                ].join(' - ');
+                container.appendChild(li);
+                container.appendChild(separator);
+            });
+        }
+
+        document.getElementById('searchDoctorForm').addEventListener('submit', function(evt) {
+            evt.preventDefault();
+            var progress = document.getElementById('progressBar');
+            var location = evt.target.elements.location.value;
+            var specialty = evt.target.elements.specialty.value;
+            var request = new XMLHttpRequest();
+            var url = [
+                window.XLAB_API_BASE_URL,
+                'city',
+                location,
+                'specialty',
+                specialty
+            ].join('/');
+
+            progress.style.display = 'block';
+            request.open('GET', url);
+            request.setRequestHeader('Content-Type', 'application/json');
+            request.send();
+            request.onload = function(res) {
+                progress.style.display = 'none';
+                renderResult(JSON.parse(this.response), 'doctorSearchResult');
+            };
+        });
+    </script>
+
+    <script>
+        function renderAllResults(data) {
+            var container = document.getElementById('allResults');
+            container.innerHTML = '';
+            data.forEach(function(element, index, array) {
+                var li = document.createElement('li');
+                var separator = document.createElement('li');
+
+                separator.classList.add('mdc-list-divider');
+                separator.setAttribute('role', 'separator');
+                li.classList.add('mdc-list-item');
+                li.classList.add('mdc-list-item');
+                li.innerText = [
+                    element.id,
+                    element.doctorName,
+                    element.visitDateTime
+                ].join(' - ');
+                container.appendChild(li);
+                container.appendChild(separator);
+            });
+        }
+
+        document.getElementById('getAll').addEventListener('submit', function(evt) {
+            evt.preventDefault();
+            var progress = document.getElementById('progressBar');
+            var request = new XMLHttpRequest();
+
+            progress.style.display = 'block';
+            request.open('GET', window.XLAB_API_BASE_URL + '/bookings');
+            request.setRequestHeader('Content-Type', 'application/json');
+            request.send();
+            request.onload = function() {
+                progress.style.display = 'none';
+                renderAllResults(JSON.parse(this.response));
+            };
+        });
+    </script>
+
+    <script>
+        document.getElementById('bookForm').addEventListener('submit', function(evt) {
+            evt.preventDefault();
+
+            var progress = document.getElementById('progressBar');
+            var doctorName = evt.target.elements.doctorName.value;
+            var visitDateTime = evt.target.elements.visitDateTime.value;
+            var request = new XMLHttpRequest();
+            var url = window.XLAB_API_BASE_URL;
+
+            if (this.submited === 'postRest') {
+                url += '/rest/book';
+            } else {
+                url += '/amqp/book';
+            }
+
+            progress.style.display = 'block';
+            request.open('POST', url);
+            request.setRequestHeader('Content-Type', 'application/json');
+            request.send(JSON.stringify({
+                doctorName: doctorName,
+                visitDateTime: visitDateTime
+            }));
+        });
+    </script>
+
+    <script>
+        (function() {
+            setTimeout(function () {
+
+                var xlabTabBar = new mdc.tabs.MDCTabBar(document.querySelector('#xlabTabBar'));
+                var panels = document.querySelector('.panels');
+
+                xlabTabBar.preventDefaultOnClick = true;
+
+                function updatePanel(index) {
+                    var activePanel = panels.querySelector('.panel.active');
+                    if (activePanel) {
+                        activePanel.classList.remove('active');
+                    }
+                    var newActivePanel = panels.querySelector('.panel:nth-child(' + (index + 1) + ')');
+                    if (newActivePanel) {
+                        newActivePanel.classList.add('active');
+                    }
+                }
+
+                xlabTabBar.listen('MDCTabBar:change', function (t) {
+                    var dynamicTabBar = t.detail;
+                    var nthChildIndex = dynamicTabBar.activeTabIndex;
+
+                    updatePanel(nthChildIndex);
+                });
+            })
+        })();
+    </script>
+    <script>
+        var determinates = document.querySelectorAll('.mdc-linear-progress');
+        for (var i = 0, determinate; determinate = determinates[i]; i++) {
+            var linearProgress = mdc.linearProgress.MDCLinearProgress.attachTo(determinate);
+            linearProgress.progress = 0.5;
+            if (determinate.dataset.buffer) {
+                linearProgress.buffer = 0.75;
+            }
+        }
+    </script>
+    </body>
+</html>

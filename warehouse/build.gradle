@@ -1,0 +1,44 @@
+buildscript {
+	ext {
+		springBootVersion = '1.5.7.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+
+group = 'pl.xsolve'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+
+ext {
+	springCloudVersion = 'Dalston.SR4'
+}
+
+dependencies {
+	compile project(':commons')
+	compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
+	compile('org.springframework.cloud:spring-cloud-starter-eureka')
+	compile("org.springframework.boot:spring-boot-starter-amqp")
+	compile('org.springframework.boot:spring-boot-starter-web')
+	compileOnly 'org.projectlombok:lombok:1.16.18'
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+	}
+}
